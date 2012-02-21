@@ -10,86 +10,81 @@
 
 This library provides tools which support the composition of objects and prototypes in an javascript-idiosyncratic style.
 
-Object.js __prefers composition to inheritance__. It is **not** an approximated class system but provides many of the convenience such a system would provide.
+Object.js __prefers composition over inheritance__. It is **not** an approximated class system but provides many similar conveniences.
 
 
 ## Synopsis
 
 A utility library for object composition:
 
-* mix modules into an object or prototype
-* override the behaviour of an existing object
-* easily specify defaults for an options argument
-* iterate over object key-value pairs
+* Mix modules into an object or prototype
+* Override the behaviour of an existing object
+* Easily specify defaults for an options argument
+* Iterate over object key-value pairs
+* copy objects recursively
 
-
-and some other less significant things utilities.
+Object.js has zero dependencies.
 
 ## Usage
 
-The main library interface is accessed by calling ``object()`` with the object to be operated on and then usually one of the library functions.
-
-For example:
-
-	  object(obj).overwrite({
-			...
-		});
-
-Library functions available:
-
-* mixin()
-* defaults()
-* overwrite()
-* override()
-* copy() and deepCopy()
-* each() and eachWithPrototype()
+		object(obj).mixin({ ... });
+		object(obj).defaults({ ... });
+		object(obj).overwrite({ ... });
+		object(obj).override({ ... });
+		object(obj).copy();
+		object(obj).deepCopy();
+		object(obj).each(function (key, value) { ... });
 
 ### Mixin
 
-Basic usage is as follows...
+Use this to combine the functionality of a module into your object or class:
 
-		object(obj).mixin(otherObj)
+		function MyClass () {
+			object(this).mixin(MyModule);
+		}
 
-mixin also accepts a function, which is assumed to be a constructor and invoked without arguments to yield an object...
-		
-		object(obj).mixin(MyModule)
+If it is a function MyModule is treated as a constructor and called like ``new MyModule`` to yield an object whose members of then assigned to ``this``. 
 
-After this call to mixin, ``obj`` now has the members of ``otherObj`` or the object contructed with the MyModule constructor. Mixin does not overwrite existing members of ``obj`` or its prototype.
+If you don't pass a function (constructor) the same behaviour applies except for the invocation of the constructor. So the following is equivalent to the above:
+
+	function MyClass () {
+		var myModule = new MyModule;
+		object(this).mixin(myModule);
+	}
 
 
 ### Defaults
 
-Defaults works the same as mixin but does not assume a function is a constructor.
-
-	``object(obj).defaults(MyCtor)`` **is not** the same as ``object(obj).mixin(MyCtor)``
-
-	``object(obj).defaults(otherObj)`` **is not** the same as ``object(obj).mixin(otherObj)``
-
-This is useful for functions that takes options:
+Defaults assigns members of the specified object to the object being modified without overwriting. Example usage: a function that takes options:
 
 	function iTakeOptions (options) {
 		
-		options = object(options).defaults({
+		options = object(options || {}).defaults({
 			async: false
 		, iterations: 5
 		}).close();
-
 		...
 	}
-
 
 	
 ### Overwrite
 
 Overwriting works the same as defaults except that existing members of an object or its prototype will be replaced.
-
-		object(obj).overwrite(replacements);
+		
+		var obj = { a: 123 };
+		
+		console.info(obj.a);
+			=> 123
+		
+		object(obj).overwrite({ a: 456 });
+		
+		console.info(obj.a);
+			=> 456
 
 
 ### Overriding
 
-Overriding works the same as overwriting except for overwritten member functions.
-In this case the replacement function is passed a proxy to the original member function as its first argument. This happens:
+Overriding works only with functions and provides a convenient way to access the overridden function.
 
 		var obj = {
 			print: function () {
@@ -99,28 +94,37 @@ In this case the replacement function is passed a proxy to the original member f
 
 		var overrides = {
 			print: function (base, ... any other args ...) {
-				// see below for how to call the original member with the base proxy
-				// e.g:
+				/*	 
+					The replacment function will receive a base proxy as its first argument.
+					This provides some conveniences for invoking the overridden function.
+				*/
 				return base();
 			}
 		}
 
 		object(obj).override(overrides);
 
+		/*
+		  obj is assigned a function that creates a base proxy and passed it, along with any arguments, to the replacement function.
+			The new function can be invoked in the same way as the original.
+			In this case the replacement simply relays to its overridden function
+		*/
 
-Calling obj.print(1,2,3) now calls the replacement version of print which receives all of the arguments preceded by a base proxy. 
+		obj.print('hello', 'world');
+		=> ['hello', 'world']
 
-The base proxy can be used in several ways:
+
+About the base proxy:
 
 * base(). The parameter-less invokation calls the original function with the same arguments as passed to the replacement. This is the most common scenario.
 
 * base(1,2,3). Passing parameters calls the original function with the these parameters only.
 
-* base.callWithNoArguments(). base() calls the original function with the arguments passed to the replacement. This helper can be used to call the original function without any arguments.
+* base.callWithNoArguments(). This helper can be used to call the original function without any arguments.
 
-In any case the base proxy returns the return value from the original function.
+* All of the above return the return value of the original function
 
-Note: the replacement **and** original functions are called in the context of obj.
+* The replacement **and** original functions are called in the context of obj.
 
 
 ### Object Copying
