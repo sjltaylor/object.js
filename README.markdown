@@ -87,16 +87,15 @@ Overwriting works the same as defaults except that existing members of an object
 Overriding works only with functions and provides a convenient way to access the overridden function.
 
 		var obj = {
-			print: function () {
+			print: function (arg1, arg2, ...) {
 				console.info(arguments);
 			}
 		};
 
 		var overrides = {
-			print: function (base, ... any other args ...) {
+			print: function (base, arg1, arg2, ...) {
 				/*	 
-					The replacment function will receive a base proxy as its first argument.
-					This provides some conveniences for invoking the overridden function.
+					The overriding function will receive a base proxy as its first argument which provides some conveniences for invoking the overridden function.
 				*/
 				return base();
 			}
@@ -105,13 +104,13 @@ Overriding works only with functions and provides a convenient way to access the
 		object(obj).override(overrides);
 
 		/*
-		  obj is assigned a function that creates a base proxy and passed it, along with any arguments, to the replacement function.
+			obj is assigned a function that creates a base proxy and passes it, along with any arguments, to the overriding function.
 			The new function can be invoked in the same way as the original.
-			In this case the replacement simply relays to its overridden function
+			In this case the override simply relays to its overridden function
 		*/
 
 		obj.print('hello', 'world');
-		=> ['hello', 'world']
+			=> ['hello', 'world']
 
 
 About the base proxy:
