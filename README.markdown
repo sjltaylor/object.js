@@ -1,9 +1,9 @@
-  ___  _     _           _      _     
- / _ \| |__ (_) ___  ___| |_   (_)___ 
-| | | | '_ \| |/ _ \/ __| __|  | / __|
-| |_| | |_) | |  __/ (__| |_ _ | \__ \
- \___/|_.__// |\___|\___|\__(_)/ |___/
-          |__/               |__/     
+	  ___  _     _           _      _     
+	 / _ \| |__ (_) ___  ___| |_   (_)___ 
+	| | | | '_ \| |/ _ \/ __| __|  | / __|
+	| |_| | |_) | |  __/ (__| |_ _ | \__ \
+	 \___/|_.__// |\___|\___|\__(_)/ |___/
+	          |__/               |__/     
 
 
 ## Motivation
@@ -141,21 +141,24 @@ The specified function is called in the context of the object being iterated, in
 
 Works in
 
-* Chrome 17.0.963.56
+* Chrome 17+
+* Firefox 7+
+* Safari 5.13+
 
 Has not been tested in other browsers
 
 
 ## Acknowledgements
 
-* Figlet LINK was used  for the ASCII art
+* [Figlet](http://www.figlet.org/) was used for the ASCII art
 * The motivation for this project is opinionated
+* I haven't tested it in many browsers
 
 ## Contributing
 
-# Install node
-# Install cup LINK and read the docs
-# Write some code or docs
-# Make a pull request
-# Live happily ever after
+1. Install node
+2. Install [cup](https://github.com/sjltaylor/cup) and read the docs
+3. Write some code or docs
+4. Make a pull request
+5. Live happily ever after
 
