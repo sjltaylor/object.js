@@ -95,7 +95,8 @@ Overriding works only with functions and provides a convenient way to access the
 		var overrides = {
 			print: function (base, arg1, arg2, ...) {
 				/*	 
-					The overriding function will receive a base proxy as its first argument which provides some conveniences for invoking the overridden function.
+					The overriding function will receive a base proxy as its first argument
+					which provides some conveniences for invoking the overridden function.
 				*/
 				return base();
 			}
@@ -104,7 +105,8 @@ Overriding works only with functions and provides a convenient way to access the
 		object(obj).override(overrides);
 
 		/*
-			obj is assigned a function that creates a base proxy and passes it, along with any arguments, to the overriding function.
+			obj is assigned a function that creates a base proxy and passes
+			it, along with any arguments, to the overriding function.
 			The new function can be invoked in the same way as the original.
 			In this case the override simply relays to its overridden function
 		*/
@@ -115,21 +117,21 @@ Overriding works only with functions and provides a convenient way to access the
 
 About the base proxy:
 
-* base(). The parameter-less invokation calls the original function with the same arguments as passed to the replacement. This is the most common scenario.
+* ``base()``. The parameter-less invokation calls the original function with the same arguments as passed to the replacement. This is the most common scenario.
 
-* base(1,2,3). Passing parameters calls the original function with the these parameters only.
+* ``base(1,2,3)``. Passing parameters calls the original function with these parameters only.
 
-* base.callWithNoArguments(). This helper can be used to call the original function without any arguments.
+* ``base.callWithNoArguments()``. This helper can be used to call the original function without any arguments.
 
 * All of the above return the return value of the original function
 
-* The replacement **and** original functions are called in the context of obj.
+* The replacement **and** original functions are called in the context of ``obj``.
 
 
 ### Object Copying
 
-* object(obj).copy()
-* object(obj).deepCopy() (recursively copies obj)
+* ``object(obj).copy()``
+* ``object(obj).deepCopy()``
 
 
 ### Object Iteration
@@ -138,7 +140,7 @@ Iterates through key-value pairs of an object
 
 	  object(obj).each(function (key, value) {}) 
 
-The specified function is called in the context of the object being iterated, in this case 'obj'.
+The specified function is called in the context of the object being iterated, in this case ``obj``.
 
 ## Browser and Platform Support
 
