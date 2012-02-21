@@ -127,6 +127,38 @@ About the base proxy:
 
 * The replacement **and** original functions are called in the context of ``obj``.
 
+This is useful in scenrios such as the following...
+		
+		function MyMixin () {}
+
+		MyModule.prototype = {
+			moduleFunction: function () { ... }
+		}
+
+		
+		function MyThing () {}
+
+		MyThing.prototype = {
+			doSomething: function () { ... }
+		};
+
+		object(MyThing.prototype).mixin(MyMixin);
+
+		// but we need to inject additional custom behaviour...
+
+		object(MyThing.prototype).override({
+			moduleFunction: function (base) {
+				this.doSomething();
+				return base();
+			}
+		});
+
+The behaviour of MyThing is very clearly comprised of
+
+1. Its own functions
+2. A mixin called MyMixin
+3. Some modifications to the MyMixin behaviour
+
 
 ### Object Copying
 
