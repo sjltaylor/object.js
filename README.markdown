@@ -8,14 +8,14 @@
 
 ## Motivation
 
-This library provides tools which support the composition of objects and prototypes in an javascript-idiosyncratic style.
+Object.js __encourages composition over inheritance__. 
 
-Object.js __prefers composition over inheritance__. It is **not** an approximated class system but provides many similar conveniences.
+Javascript doesn't have a class system.
+
+The purpose of Object.js is **not** try to provide an approximated class system for javascript. Instead it provides functionality to support the composition of objects and prototypes in an javascript-idiosyncratic style giving us the conveniences that a class system would provide.
 
 
-## Synopsis
-
-A utility library for object composition:
+## Features
 
 * Mix modules into an object or prototype
 * Override the behaviour of an existing object
@@ -23,7 +23,11 @@ A utility library for object composition:
 * Iterate over object key-value pairs
 * copy objects recursively
 
+
+## Dependencies
+
 Object.js has zero dependencies.
+
 
 ## Usage
 
@@ -188,8 +192,8 @@ Has not been tested in other browsers
 ## Acknowledgements
 
 * [Figlet](http://www.figlet.org/) was used for the ASCII art
-* The motivation for this project is opinionated
 * I haven't tested it in many browsers
+* i learnt a lot about javascript by reading [The Little Book on CoffeeScript](http://arcturo.github.com/library/coffeescript/)
 
 ## Contributing
 
@@ -198,4 +202,3 @@ Has not been tested in other browsers
 3. Write some code or docs
 4. Make a pull request
 5. Live happily ever after
-
