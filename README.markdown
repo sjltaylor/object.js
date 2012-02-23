@@ -193,7 +193,7 @@ Has not been tested in other browsers
 
 * [Figlet](http://www.figlet.org/) was used for the ASCII art
 * I haven't tested it in many browsers
-* i learnt a lot about javascript by reading [The Little Book on CoffeeScript](http://arcturo.github.com/library/coffeescript/)
+* I learnt a lot about javascript by reading [The Little Book on CoffeeScript](http://arcturo.github.com/library/coffeescript/)
 
 ## Contributing
 
