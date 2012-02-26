@@ -14,6 +14,24 @@ describe('object()', function () {
 		expect(api.each).toBeAFunction();
 	});
 
+	it('raises a helpful error if the argument is not an object', function () {
+		expect(function () {
+			object(function(){});
+		}).toThrow();
+	});
+
+	it('raises a helpful error if an undefined object is passed', function () {
+		expect(function () {
+			object({}.undefinedMember);
+		}).toThrow();
+	});
+
+	it('raises a helpful error if a null object is passed', function () {
+		expect(function () {
+			object(null);
+		}).toThrow();
+	})
+
 	describe('library api', function () {
 		
 		describe('defaults()', function () {

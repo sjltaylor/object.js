@@ -1,4 +1,4 @@
-object = (function () {
+/**/;object = (function () {
 
 	function ObjectJsLibraryInterface (obj) {
 		this._obj = obj;
@@ -75,10 +75,7 @@ object = (function () {
 			var newObject = this._obj === null ? null : {};
 			
 			this.each(function (key, value) {
-				
-				// (typeof value === 'object' && value) checks for an object that is NOT null
-
-				newObject[key] = (typeof value === 'object' && value) ? object(value).deepCopy() : value;
+				newObject[key] = typeof value === 'object' ? object(value).deepCopy() : value;
 			});
 
 			return newObject;
@@ -94,12 +91,8 @@ object = (function () {
 	}
 
 	return function object (obj) {
-		
-		if (!obj || typeof(obj) !== 'object') {
-			throw new TypeError('argument must be an object but got: ' + obj);
-		}
-
 		return new ObjectJsLibraryInterface(obj);
 	}
 })();
 
+;
