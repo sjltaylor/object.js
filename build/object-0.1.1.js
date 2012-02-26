@@ -44,7 +44,9 @@
 					return original.call(context);
 				}
 
-				return replacement.bind(context, baseProxy).apply(context, arguments);
+				var args = Array.prototype.slice.call(callArgs, 0);
+				args.unshift(baseProxy);
+				return replacement.apply(context, args);
 	    }
 		}
 	, override: function (overrides) {
