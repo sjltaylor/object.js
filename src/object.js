@@ -44,6 +44,11 @@ object = (function () {
 					return original.call(context);
 				}
 
+				baseProxy.inject = function (injection) {
+					injection.apply(context, callArgs);
+					return original.call(context);
+				}
+
 				var args = Array.prototype.slice.call(callArgs, 0);
 				args.unshift(baseProxy);
 				return replacement.apply(context, args);
@@ -63,11 +68,18 @@ object = (function () {
 			return this._obj;
 		}
 	, copy: function () {
+
 			var newObject = this._obj === null ? null : {};
 			
-			this.each(function (key, value) {
-				newObject[key] = value;
-			});
+			if (arguments.length) {
+				for (var i = 0, l = arguments.length; i < l; i++) {
+					newObject[arguments[i]] = this._obj[arguments[i]];
+				}
+			} else {
+				this.each(function (key, value) {
+					newObject[key] = value;
+				});				
+			}
 
 			return newObject;
 		}

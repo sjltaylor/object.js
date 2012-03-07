@@ -289,6 +289,32 @@ describe('object()', function () {
 		      expect(overrideContext).toBe(target);
 		      expect(originalContext).toBe(target);
 		    });
+
+		    it('injects functionality with base.inject()', function () {
+		    	
+		    	var original = jasmine.createSpy('original').andReturn('HELLO');
+		    	
+		    	var obj = {
+		    		hello: original
+		    	};
+
+		    	var context, args;
+					
+					object(obj).override({
+		    		hello: function (base) {
+		    			return base.inject(function () {
+		    				context = this;
+		    				args = arguments;
+		    			})
+		    		}
+		    	})
+
+					var rtn = obj.hello(1,2,3);
+
+					expect(rtn).toBe('HELLO');
+					expect(args).toEqual([1,2,3]);
+					expect(context).toBe(obj);
+		    });
 		  });
 		});
 
@@ -307,6 +333,18 @@ describe('object()', function () {
 				expect(copy.b).toBe(null);
 				expect(copy.c).toBe(obj.c);
 			});
+
+			it('returns a new object containing only the members specified', function () {
+				var obj = {
+					good: 'bye'
+				, hello: 'world'
+				, cruel: 'world'
+				};
+
+				var slice = object(obj).copy('good', 'cruel');
+				
+				expect(slice).toEqual({ good: 'bye', cruel: 'world' });
+			})
 		});
 
 		describe('deepCopy()', function () {

@@ -44,6 +44,11 @@
 					return original.call(context);
 				}
 
+				baseProxy.inject = function (injection) {
+					injection.apply(context, callArgs);
+					return original.call(context);
+				}
+
 				var args = Array.prototype.slice.call(callArgs, 0);
 				args.unshift(baseProxy);
 				return replacement.apply(context, args);
@@ -75,7 +80,10 @@
 			var newObject = this._obj === null ? null : {};
 			
 			this.each(function (key, value) {
-				newObject[key] = typeof value === 'object' ? object(value).deepCopy() : value;
+				
+				// (typeof value === 'object' && value) checks for an object that is NOT null
+
+				newObject[key] = (typeof value === 'object' && value) ? object(value).deepCopy() : value;
 			});
 
 			return newObject;
@@ -91,6 +99,11 @@
 	}
 
 	return function object (obj) {
+		
+		if (!obj || typeof(obj) !== 'object') {
+			throw new TypeError('argument must be an object but got: ' + obj);
+		}
+
 		return new ObjectJsLibraryInterface(obj);
 	}
 })();

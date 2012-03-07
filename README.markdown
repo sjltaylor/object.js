@@ -21,7 +21,8 @@ The purpose of Object.js is **not** try to provide an approximated class system 
 * Override the behaviour of an existing object
 * Easily specify defaults for an options argument
 * Iterate over object key-value pairs
-* copy objects recursively
+* mask an objects members
+* copy objects recursively or partially
 
 
 ## Dependencies
@@ -127,24 +128,39 @@ About the base proxy:
 
 * ``base.callWithNoArguments()``. This helper can be used to call the original function without any arguments.
 
+* ``base.inject(function(){})``. This covers the most common scenario:
+		
+		function (base, arg1, arg2, ...) {
+			return base.inject(function (arg1, arg2, ...) {
+				// this is the context of the override
+				this.doSomethingElse();
+			});
+		}
+
 * All of the above return the return value of the original function
 
 * The replacement **and** original functions are called in the context of ``obj``.
 
 This is useful in scenrios such as the following...
 		
+		// somewhere perhaps in a file far away...
+
 		function MyMixin () {}
 
-		MyModule.prototype = {
+		MyMixin.prototype = {
 			moduleFunction: function () { ... }
 		}
 
-		
+		// and I define...
+
 		function MyThing () {}
 
 		MyThing.prototype = {
 			doSomething: function () { ... }
 		};
+
+
+		// which uses some other functionality
 
 		object(MyThing.prototype).mixin(MyMixin);
 
@@ -157,7 +173,7 @@ This is useful in scenrios such as the following...
 			}
 		});
 
-The behaviour of MyThing is very clearly comprised of
+The behaviour of MyThing is comprised of
 
 1. Its own functions
 2. A mixin called MyMixin
@@ -166,9 +182,19 @@ The behaviour of MyThing is very clearly comprised of
 
 ### Object Copying
 
-* ``object(obj).copy()``
+* ``object(obj).copy([memberName,]*)``
 * ``object(obj).deepCopy()``
 
+objects can be copied partially
+
+ 		obj = {
+			good: 'bye'
+		, hello: 'world'
+		, cruel: 'world'
+		};
+
+		object(obj).copy('good', 'cruel') // any number of arguments are sliced
+		=> { good: 'bye', cruel: 'world' }
 
 ### Object Iteration
 
