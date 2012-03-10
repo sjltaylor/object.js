@@ -1,0 +1,5 @@
+-> object(obj).delegateTo(otherObj, [
+	'thisFunction',
+	'thatFunction',
+	'theOtherFunction']);
+(could also call without array just N params)

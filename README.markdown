@@ -200,7 +200,9 @@ objects can be copied partially
 
 Iterates through key-value pairs of an object
 
-	  object(obj).each(function (key, value) {}) 
+	  object(obj).each(function (value, key) {}) 
+
+Most of the time ``value`` is more interesting and might be what you're expecting, incase it's useful, ``key`` is given as a second parameter.
 
 The specified function is called in the context of the object being iterated, in this case ``obj``.
 

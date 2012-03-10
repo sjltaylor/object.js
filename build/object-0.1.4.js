@@ -68,18 +68,25 @@
 			return this._obj;
 		}
 	, copy: function () {
+
 			var newObject = this._obj === null ? null : {};
 			
-			this.each(function (key, value) {
-				newObject[key] = value;
-			});
+			if (arguments.length) {
+				for (var i = 0, l = arguments.length; i < l; i++) {
+					newObject[arguments[i]] = this._obj[arguments[i]];
+				}
+			} else {
+				this.each(function (value, key) {
+					newObject[key] = value;
+				});				
+			}
 
 			return newObject;
 		}
 	, deepCopy: function () {
 			var newObject = this._obj === null ? null : {};
 			
-			this.each(function (key, value) {
+			this.each(function (value, key) {
 				
 				// (typeof value === 'object' && value) checks for an object that is NOT null
 
@@ -91,7 +98,7 @@
 	, each: function (delegate) {
 			
 			for(var member in this._obj) {
-				delegate.call(this._obj, member, this._obj[member]);
+				delegate.call(this._obj, this._obj[member], member);
 			}
 			
 			return this._obj;

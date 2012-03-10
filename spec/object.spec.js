@@ -378,11 +378,11 @@ describe('object()', function () {
 
 				var pairs = [];
 
-				object(obj).each(function (key, value) {
-					pairs.push([key, value]);
+				object(obj).each(function (value, key) {
+					pairs.push([value, key]);
 				});
 
-				expect(pairs).toEqual([['b', 456], ['a', 123]]);
+				expect(pairs).toEqual([[456, 'b'], [123, 'a']]);
 			});
 
 			it('calls the delegate in the context of the object being iterated', function () {
