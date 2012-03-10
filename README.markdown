@@ -38,7 +38,7 @@ Object.js has zero dependencies.
 		object(obj).override({ ... });
 		object(obj).copy();
 		object(obj).deepCopy();
-		object(obj).each(function (key, value) { ... });
+		object(obj).each(function (value, key) { ... });
 
 ### Mixin
 
@@ -202,7 +202,8 @@ Iterates through key-value pairs of an object
 
 	  object(obj).each(function (value, key) {}) 
 
-Most of the time ``value`` is more interesting and might be what you're expecting, incase it's useful, ``key`` is given as a second parameter.
+Why ``value, key`` rather than ``key, value``:
+``value`` are more frequently used than keys. When iterating through arrays etc, the value is the first argument. To prevent surprise, the object iterator stays consistent, adding the extra 'key' as a second parameter.
 
 The specified function is called in the context of the object being iterated, in this case ``obj``.
 
