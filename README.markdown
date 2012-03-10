@@ -12,7 +12,7 @@ Object.js __encourages composition over inheritance__.
 
 Javascript doesn't have a class system.
 
-The purpose of Object.js is **not** try to provide an approximated class system for javascript. Instead it provides functionality to support the composition of objects and prototypes in an javascript-idiosyncratic style giving us the conveniences that a class system would provide.
+The purpose of Object.js is **not** try to provide an approximated class system for javascript. Instead it provides functionality to support the composition of objects and prototypes in an javascript-idiosyncratic style, giving us the conveniences that a class system would provide.
 
 
 ## Features
