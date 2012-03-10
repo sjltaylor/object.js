@@ -180,7 +180,7 @@ The behaviour of MyThing is comprised of
 3. Some modifications to the MyMixin behaviour
 
 
-### Object Copying
+### Copying
 
 * ``object(obj).copy([memberName,]*)``
 * ``object(obj).deepCopy()``
@@ -196,14 +196,13 @@ objects can be copied partially
 		object(obj).copy('good', 'cruel') // any number of arguments are sliced
 		=> { good: 'bye', cruel: 'world' }
 
-### Object Iteration
+### Iterating
 
 Iterates through key-value pairs of an object
 
 	  object(obj).each(function (value, key) {}) 
 
-Why ``value, key`` rather than ``key, value``:
-``value`` are more frequently used than keys. When iterating through arrays etc, the value is the first argument. To prevent surprise, the object iterator stays consistent, adding the extra 'key' as a second parameter.
+Why ``value, key`` rather than ``key, value``: You probably iterate through arrays more frequently than objects, in such cases, the value is the first argument. To prevent surprise, the object iterator stays consistent, adding the extra 'key' as a second parameter.
 
 The specified function is called in the context of the object being iterated, in this case ``obj``.
 
