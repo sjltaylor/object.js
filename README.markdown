@@ -202,13 +202,15 @@ Iterates through key-value pairs of an object
 
 	  object(obj).each(function (value, key) {}) 
 
+The specified function is called in the context of the object being iterated, in this case ``obj``.
+
 Why ``value, key`` rather than ``key, value``: It's more common to iterate through arrays than objects, in such cases, the value is the first argument to to the callback:
 
 		['array', 'of', 'things'].forEach(function (value) { ... })``
 
 To prevent surprise, the object iterator stays consistent, adding the extra 'key' as a second parameter.
 
-The specified function is called in the context of the object being iterated, in this case ``obj``.
+
 
 ## Browser and Platform Support
 
