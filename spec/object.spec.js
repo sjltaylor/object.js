@@ -14,19 +14,18 @@ describe('object()', function () {
 		expect(api.each).toBeAFunction();
 	});
 
-	it('raises a helpful error if the argument is not an object', function () {
+	it('throws a helpful error if the argument is not an object', function () {
 		expect(function () {
 			object(function(){});
 		}).toThrow();
 	});
 
-	it('raises a helpful error if an undefined object is passed', function () {
-		expect(function () {
-			object({}.undefinedMember);
-		}).toThrow();
+	it('returns a new object if an undefined object is passed', function () {
+		var undef;
+		expect(object(undef).mixin({a:1})).toEqual({a:1});
 	});
 
-	it('raises a helpful error if a null object is passed', function () {
+	it('throws a helpful error if a null object is passed', function () {
 		expect(function () {
 			object(null);
 		}).toThrow();
@@ -89,6 +88,20 @@ describe('object()', function () {
 		    var obj = {};
 		    var result = object(obj).defaults(obj);
 		    expect(result).toBe(obj);
+		  });
+
+		  it('allows any number of objects which are mixed in in the order specifed', function () {
+		  	var obj = {}
+		  		, a 	= {a:1, b:2}
+		  		, b   = {b:3, c:3}
+		  		, c 	= {hello: 'world'};
+
+		  	object(obj).defaults(a,b,c);
+
+		  	expect(obj.a).toBe(1);
+		  	expect(obj.b).toBe(2);
+		  	expect(obj.c).toBe(3);
+		  	expect(obj.hello).toBe('world');
 		  });
 		});
 
@@ -317,6 +330,52 @@ describe('object()', function () {
 		    });
 		  });
 		});
+
+		describe('delegateTo', function () {
+
+			var obj, delegate;
+
+			beforeEach(function () {
+				
+				obj = {};
+
+				delegate = {
+					hello: function () {
+						return 'moto';
+					}
+				, world: function () {
+						return false;
+					}
+				}
+
+				object(obj).delegateTo(delegate, 'hello', 'world');
+			});
+
+		  it('throws an error if you try and delegate to a non-function', function () {
+		  	expect(function () {
+		  		object({}).delegateTo({fish: true}, 'fish');
+		  	}).toThrow("cannot delegate to non-function: fish");
+		  });
+
+			it('calls the specified functions on the delegate', function () {
+				
+				spyOn(delegate, 'hello');
+
+				obj.hello();
+
+				expect(delegate.hello).toHaveBeenCalled();
+			});
+
+			it('returns the delegates return value', function () {
+				expect(obj.hello()).toEqual('moto');
+			});
+
+			it('passes all arguments to the delegate function', function () {
+				spyOn(delegate, 'world');
+				obj.world(1,2,3,4);
+				expect(delegate.world).toHaveBeenCalledWith(1,2,3,4);
+			});
+		})
 
 		describe('copy()', function () {
 			it('copies members, does not recur', function () {

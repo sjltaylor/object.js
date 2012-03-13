@@ -1,19 +1,23 @@
 /**/;object = (function () {
 
-	function ObjectJsLibraryInterface (obj) {
-		this._obj = obj;
+	function ObjectJSApi (obj) {
+		this.__obj__ = obj;
 	}
 
-	ObjectJsLibraryInterface.prototype = {
-		defaults: function (defaults) {
+	ObjectJSApi.prototype = {
+		defaults: function () {
 			
-			for (var member in defaults) {
-        if (!(member in this._obj)) {
-          this._obj[member] = defaults[member];
-        }
-      }
+			for (var i = 0, l = arguments.length; i < l; i++) {
+				var defaults = arguments[i];
 
-			return this._obj;
+				for (var member in defaults) {
+	        if (!(member in this.__obj__)) {
+	          this.__obj__[member] = defaults[member];
+	        }
+	      }
+			}
+
+			return this.__obj__;
 		}
 	, mixin: function (mixin) {
 			var mixin = typeof mixin === 'function' ? new mixin : mixin;
@@ -22,14 +26,14 @@
 	, overwrite: function (replacements) {
 			
 			for (var member in replacements) {
-        this._obj[member] = replacements[member];
+        this.__obj__[member] = replacements[member];
       }
 
-      return this._obj;
+      return this.__obj__;
 		}
-	, _overrideFunction: function (original, replacement) {
+	, __overrideFunction__: function (original, replacement) {
 		
-			var context = this._obj;
+			var context = this.__obj__;
 
 			return function () {
 				
@@ -58,22 +62,40 @@
 			
 			for (var member in overrides) {
 				
-				if (!(typeof this._obj[member] === 'function')) {
+				if (!(typeof this.__obj__[member] === 'function')) {
 					throw new Error('no function to override: ' + member);
 				}
 				
-				this._obj[member] = this._overrideFunction(this._obj[member], overrides[member]);
+				this.__obj__[member] = this.__overrideFunction__(this.__obj__[member], overrides[member]);
 			}
 
-			return this._obj;
+			return this.__obj__;
+		}
+	, delegateTo: function (delegate) {
+
+			for(var i = 1, l = arguments.length; i < l; i++) {
+				var name = arguments[i];
+
+				if (typeof delegate[name] !== 'function') {
+					throw new Error('cannot delegate to non-function: ' + name)
+				}
+
+				this.__obj__[name] = (function (name) {
+					return function () {
+						return delegate[name].apply(delegate, arguments);
+					}
+				})(name);
+			}
+
+			return this.__obj__;
 		}
 	, copy: function () {
 
-			var newObject = this._obj === null ? null : {};
+			var newObject = this.__obj__ === null ? null : {};
 			
 			if (arguments.length) {
 				for (var i = 0, l = arguments.length; i < l; i++) {
-					newObject[arguments[i]] = this._obj[arguments[i]];
+					newObject[arguments[i]] = this.__obj__[arguments[i]];
 				}
 			} else {
 				this.each(function (value, key) {
@@ -84,7 +106,7 @@
 			return newObject;
 		}
 	, deepCopy: function () {
-			var newObject = this._obj === null ? null : {};
+			var newObject = this.__obj__ === null ? null : {};
 			
 			this.each(function (value, key) {
 				
@@ -97,21 +119,25 @@
 		}
 	, each: function (delegate) {
 			
-			for(var member in this._obj) {
-				delegate.call(this._obj, this._obj[member], member);
+			for(var member in this.__obj__) {
+				delegate.call(this.__obj__, this.__obj__[member], member);
 			}
 			
-			return this._obj;
+			return this.__obj__;
 		}
 	}
 
 	return function object (obj) {
 		
+		if (typeof obj === 'undefined') {
+			obj = {};
+		}
+
 		if (!obj || typeof(obj) !== 'object') {
 			throw new TypeError('argument must be an object but got: ' + obj);
 		}
 
-		return new ObjectJsLibraryInterface(obj);
+		return new ObjectJSApi(obj);
 	}
 })();
 

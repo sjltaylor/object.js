@@ -60,16 +60,22 @@ If you don't pass a function (constructor) the same behaviour applies except for
 
 ### Defaults
 
-Defaults assigns members of the specified object to the object being modified without overwriting. Example usage: a function that takes options:
+Defaults assigns members of the specified object(s) to the object being modified without overwriting. Example usage: a function that takes options:
 
 	function iTakeOptions (options) {
 		
-		options = object(options || {}).defaults({
+		options = object(options).defaults({
 			async: false
 		, iterations: 5
-		}).close();
+		}, {
+			another: 'object'
+		, 'to-mix': 'in'
+		});
 		...
 	}
+
+* any number of objects can be passed to defaults, they are mixed in in the order specified
+* object(obj) with an undefined obj will act on a new, empty object.
 
 	
 ### Overwrite
