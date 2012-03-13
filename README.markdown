@@ -23,6 +23,7 @@ The purpose of Object.js is **not** try to provide an approximated class system 
 * Iterate over object key-value pairs
 * mask an objects members
 * copy objects recursively or partially
+* easily wrap and delegate to another object
 
 
 ## Dependencies
@@ -185,6 +186,14 @@ The behaviour of MyThing is comprised of
 2. A mixin called MyMixin
 3. Some modifications to the MyMixin behaviour
 
+### DelegateTo
+
+		object(obj).delegateTo(delegate, 'this', 'that', 'theOther');
+
+obj has functions 'this', 'that', and 'theOther', which simpled delegate to the delegate objects functions of the same name.
+
+* arguments are forwarded
+* the delegates return values are returned
 
 ### Copying
 
