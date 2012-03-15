@@ -107,11 +107,60 @@ describe('object()', function () {
 
 		describe('mixin()', function () {
 			
-			/*
-				
-				The full behaviour of mixin() is not specced because it does little more than delegate to defaults();
+			it('gains the members of the specified mixin', function () {
+		    
+		    var cFunction = function () { return 456; }
+		    	, dObject		= {};
 
-			*/
+		    var obj = object({}).mixin({
+		    	a: 123
+		    , b: true
+		    , c: cFunction
+		    , d: dObject
+		    })
+		    
+		    expect(obj.a).toEqual(123);
+		    expect(obj.b).toBe(true);
+		    expect(obj.c).toBe(cFunction);
+		    expect(obj.d).toEqual(dObject);
+		  });
+
+		  it('gains the members of the specified mixins prototype', function () {
+		  	
+		  	function MyDefaults () {}
+		  	MyDefaults.prototype = { abc: 123 };
+
+		  	var obj = object({}).mixin(new MyDefaults);
+
+		  	expect(obj.abc).toBe(123);
+		  });
+
+		  it('does not overwrite members of the target object', function () {
+		    
+		    var obj = object({a:123}).mixin({a:456});
+
+		    expect(obj.a).toBe(123);
+		  });
+
+		  it('does not overwrite members of the target objects prototype', function () {
+		  	 
+		  	function MyObj () {};
+		  	MyObj.prototype = {
+		  	 	f1: function () { return 1234; }
+		  	};
+
+		  	var obj = object(new MyObj).mixin({
+		  		f1: function () { return 5678; }
+		  	});
+
+		  	expect(obj.f1()).toBe(1234);
+		  });
+
+		  it('returns the target object', function () {
+		    var obj = {};
+		    var result = object(obj).mixin(obj);
+		    expect(result).toBe(obj);
+		  });
 
 			it('mixes in a constructed object if passed a function', function () {
 				
@@ -127,6 +176,35 @@ describe('object()', function () {
 
 				expect(obj.abc).toBe(123);
 				expect(obj.def).toBe(456);
+			});
+
+			it('calls an mixin initializer if one exists, passing all except the first arguments', function () {
+				
+				var obj = {};
+
+				var mixin = {
+					mixin: jasmine.createSpy('mixin initializer')
+				};
+
+				object(obj).mixin(mixin, 1, true, 'three');
+
+				expect(mixin.mixin).toHaveBeenCalledWith(1, true, 'three');
+				expect(obj.mixin).toBeUndefined();
+			});
+
+			it('mixes in functions before calling the initializer', function () {
+				var obj = {};
+
+				var mixin = {
+					mixin: function () {
+						this.woof();
+					}
+				, woof: jasmine.createSpy('mixin function')
+				};
+
+				object(obj).mixin(mixin);
+
+				expect(obj.woof).toHaveBeenCalled();
 			});
 		});
 		

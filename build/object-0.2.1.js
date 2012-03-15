@@ -1,4 +1,4 @@
-object = (function () {
+/**/;object = (function () {
 
 	function ObjectJSApi (obj) {
 		this.__obj__ = obj;
@@ -155,3 +155,4 @@ object = (function () {
 	}
 })();
 
+;

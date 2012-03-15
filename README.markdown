@@ -58,6 +58,27 @@ If you don't pass a function (constructor) the same behaviour applies except for
 		object(this).mixin(myModule);
 	}
 
+#### Calling a Mixin initializer
+
+after mixing in, if an initialize method was defined by the mixin it is called with any arguments after the mixin or mixin constructor.
+	
+	MyModule.prototype = {
+		mixin: function () {
+			console.warn(arguments);
+		}
+	}
+
+	var obj = {};
+
+	object({}).mixin(MyModule, 1, true, 'three');
+
+
+A MyModule object is created and its mixin function is called with the arguments 1, true, 'three'
+
+**Notes**: 
+
+* The mixin initializer will not be mixed into the object.
+* The functions of the mixin are mixed in before the initializer is called
 
 ### Defaults
 
