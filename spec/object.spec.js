@@ -397,7 +397,7 @@ describe('object()', function () {
 		  });
 		});
 
-		describe('delegateTo', function () {
+		describe('delegateTo()', function () {
 
 			var obj, delegate;
 
@@ -529,5 +529,18 @@ describe('object()', function () {
 				expect(rtn).toBe(obj);
 			});
 		});
+
+		describe('toArray()', function () {
+			it('returns an array of all of the objects members', function () {
+				
+				var obj = {
+					one: 	 1,
+					two: 	 2,
+					three: 3
+				};
+
+				expect(object(obj).toArray()).toEqual([1,2,3]);
+			});
+		})
 	});
 });

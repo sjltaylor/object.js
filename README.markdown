@@ -40,6 +40,7 @@ Object.js has zero dependencies.
 		object(obj).copy();
 		object(obj).deepCopy();
 		object(obj).each(function (value, key) { ... });
+		object(obj).toArray()
 
 ### Mixin
 
@@ -58,7 +59,7 @@ If you don't pass a function (constructor) the same behaviour applies except for
 		object(this).mixin(myModule);
 	}
 
-#### Calling a Mixin initializer
+#### Providing a Mixin initializer
 
 after mixing in, if an initialize method was defined by the mixin it is called with any arguments after the mixin or mixin constructor.
 	
@@ -232,7 +233,7 @@ objects can be copied partially
 		object(obj).copy('good', 'cruel') // any number of arguments are sliced
 		=> { good: 'bye', cruel: 'world' }
 
-### Iterating
+### Each
 
 Iterates through key-value pairs of an object
 
@@ -246,6 +247,19 @@ Why ``value, key`` rather than ``key, value``: It's more common to iterate throu
 
 To prevent surprise, the object iterator stays consistent, adding the extra 'key' as a second parameter.
 
+
+### ToArray
+
+Get an array of an objects values
+
+		var obj = {
+			one: 	 1,
+			two: 	 2,
+			three: 3
+		};
+
+		object(obj).toArray();
+		=> [1, 2, 3]
 
 
 ## Browser and Platform Support

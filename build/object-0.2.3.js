@@ -139,6 +139,13 @@
 			
 			return this.__obj__;
 		}
+	, toArray: function () {
+			var o = this.__obj__;
+
+			return Object.keys(o).map(function (key) {
+				return o[key];
+			});
+		}
 	}
 
 	return function object (obj) {
