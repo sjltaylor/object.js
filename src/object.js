@@ -147,10 +147,6 @@ object = (function () {
 			obj = {};
 		}
 
-		if (!obj || typeof(obj) !== 'object') {
-			throw new TypeError('argument must be an object but got: ' + obj);
-		}
-
 		return new ObjectJSApi(obj);
 	}
 })();

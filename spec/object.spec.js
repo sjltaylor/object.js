@@ -14,22 +14,10 @@ describe('object()', function () {
 		expect(api.each).toBeAFunction();
 	});
 
-	it('throws a helpful error if the argument is not an object', function () {
-		expect(function () {
-			object(function(){});
-		}).toThrow();
-	});
-
 	it('returns a new object if an undefined object is passed', function () {
 		var undef;
 		expect(object(undef).mixin({a:1})).toEqual({a:1});
 	});
-
-	it('throws a helpful error if a null object is passed', function () {
-		expect(function () {
-			object(null);
-		}).toThrow();
-	})
 
 	describe('library api', function () {
 		
