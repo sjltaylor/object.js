@@ -45,20 +45,24 @@ Object.js has zero dependencies.
 
 ### mixin and qmixin
 
-Use this to combine the functionality of a module into your object or class:
+Mix functions from one object into another:
+
+    function MyClass () {
+      object(this).mixin(myModule);
+    }
+
+The members `myModule` are mixed into `this`
+    
+If instead a function is passed, it is called as a constructor: ``new MyModule`` to yield an object whose members are mixed in. 
 
     function MyClass () {
       object(this).mixin(MyModule);
     }
-
-If it is a function MyModule is treated as a constructor and called like ``new MyModule`` to yield an object whose members of then assigned to ``this``. 
-
-If you don't pass a function (constructor) the same behaviour applies except for the invocation of the constructor. So the following is equivalent to the above:
-
-  function MyClass () {
+    // is the same as ...
+    function MyClass () {
     var myModule = new MyModule;
-    object(this).mixin(myModule);
-  }
+      object(this).mixin(myModule);
+    }
 
 `mixin()` will throw an error if there is a name collision. If instead you want to simply skip members with colliding names, use `qmixin()`
 
