@@ -8,22 +8,19 @@
 
 ## Motivation
 
-Object.js __encourages composition over inheritance__. 
+This library provides functionality to support the composition of objects in a javascript-idiosyncratic style, giving us the conveniences that a class system provides while **not trying to approximate a class system**.
 
-Javascript doesn't have a class system.
-
-The purpose of Object.js is **not** try to provide an approximated class system for javascript. Instead it provides functionality to support the composition of objects and prototypes in an javascript-idiosyncratic style, giving us the conveniences that a class system would provide.
-
+Object.js __encourages composition over inheritance__.
 
 ## Features
 
-* Mix modules into an object or prototype
-* Override the behaviour of an existing object
+* Mixins
+* Override functions of an existing object
 * Easily specify defaults for an options argument
 * Iterate over object key-value pairs
-* mask an objects members
-* copy objects recursively or partially
-* easily wrap and delegate to another object
+* Slice an objects members
+* Copy objects
+* Wrap and delegate to another object
 * Extensible: `object(obj).yourFunctionHere()`
 
 
