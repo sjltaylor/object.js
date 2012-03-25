@@ -1,9 +1,9 @@
-	  ___  _     _           _      _     
-	 / _ \| |__ (_) ___  ___| |_   (_)___ 
-	| | | | '_ \| |/ _ \/ __| __|  | / __|
-	| |_| | |_) | |  __/ (__| |_ _ | \__ \
-	 \___/|_.__// |\___|\___|\__(_)/ |___/
-	          |__/               |__/     
+    ___  _     _           _      _     
+   / _ \| |__ (_) ___  ___| |_   (_)___ 
+  | | | | '_ \| |/ _ \/ __| __|  | / __|
+  | |_| | |_) | |  __/ (__| |_ _ | \__ \
+   \___/|_.__// |\___|\___|\__(_)/ |___/
+            |__/               |__/     
 
 
 ## Motivation
@@ -24,6 +24,7 @@ The purpose of Object.js is **not** try to provide an approximated class system 
 * mask an objects members
 * copy objects recursively or partially
 * easily wrap and delegate to another object
+* Extensible: `object(obj).yourFunctionHere()`
 
 
 ## Dependencies
@@ -33,120 +34,126 @@ Object.js has zero dependencies.
 
 ## Usage
 
-		object(obj).mixin({ ... });
-		object(obj).defaults({ ... });
-		object(obj).overwrite({ ... });
-		object(obj).override({ ... });
-		object(obj).copy();
-		object(obj).deepCopy();
-		object(obj).each(function (value, key) { ... });
-		object(obj).toArray()
+    object(obj).mixin({ ... });
+    object(obj).qmixin({ ... });
+    object(obj).defaults({ ... });
+    object(obj).overwrite({ ... });
+    object(obj).override({ ... });
+    object(obj).copy();
+    object(obj).deepCopy();
+    object(obj).each(function (value, key) { ... });
+    object(obj).toArray()
 
-### Mixin
+### mixin and qmixin
 
 Use this to combine the functionality of a module into your object or class:
 
-		function MyClass () {
-			object(this).mixin(MyModule);
-		}
+    function MyClass () {
+      object(this).mixin(MyModule);
+    }
 
 If it is a function MyModule is treated as a constructor and called like ``new MyModule`` to yield an object whose members of then assigned to ``this``. 
 
 If you don't pass a function (constructor) the same behaviour applies except for the invocation of the constructor. So the following is equivalent to the above:
 
-	function MyClass () {
-		var myModule = new MyModule;
-		object(this).mixin(myModule);
-	}
+  function MyClass () {
+    var myModule = new MyModule;
+    object(this).mixin(myModule);
+  }
+
+`mixin()` will throw an error if there is a name collision. If instead you want to simply skip members with colliding names, use `qmixin()`
 
 #### Providing a Mixin initializer
 
 after mixing in, if an initialize method was defined by the mixin it is called with any arguments after the mixin or mixin constructor.
-	
-	MyModule.prototype = {
-		mixin: function () {
-			console.warn(arguments);
-		}
-	}
+  
+  function MyModule () { }
 
-	var obj = {};
+  MyModule.prototype = {
+    __mixin__: function () {
+      console.warn(arguments);
+    }
+  }
 
-	object({}).mixin(MyModule, 1, true, 'three');
+  var obj = {};
+
+  object({}).mixin(MyModule, 1, true, 'three');
 
 
 A MyModule object is created and its mixin function is called with the arguments 1, true, 'three'
 
-**Notes**: 
+**Notes**:
 
 * The mixin initializer will not be mixed into the object.
 * The functions of the mixin are mixed in before the initializer is called
+* The MyModule constructor is not called with arguments
 
-### Defaults
+### defaults
 
 Defaults assigns members of the specified object(s) to the object being modified without overwriting. Example usage: a function that takes options:
 
-	function iTakeOptions (options) {
-		
-		options = object(options).defaults({
-			async: false
-		, iterations: 5
-		}, {
-			another: 'object'
-		, 'to-mix': 'in'
-		});
-		...
-	}
+  function iTakeOptions (options) {
+    
+    options = object(options).defaults({
+      async: false
+    , iterations: 5
+    }, {
+      another: 'object'
+    , 'to-mix': 'in'
+    });
+    ...
+  }
 
 * any number of objects can be passed to defaults, they are mixed in in the order specified
 * object(obj) with an undefined obj will act on a new, empty object.
 
-	
-### Overwrite
+  
+### overwrite
 
 Overwriting works the same as defaults except that existing members of an object or its prototype will be replaced.
-		
-		var obj = { a: 123 };
-		
-		console.info(obj.a);
-			=> 123
-		
-		object(obj).overwrite({ a: 456 });
-		
-		console.info(obj.a);
-			=> 456
+    
+    var obj = { a: 123 };
+    
+    console.info(obj.a);
+      => 123
+    
+    object(obj).overwrite({ a: 456 });
+    
+    console.info(obj.a);
+      => 456
 
 
-### Overriding
+### override
 
-Overriding works only with functions and provides a convenient way to access the overridden function.
+Override works only with functions and provides a convenient way to access the overridden function.
 
-		var obj = {
-			print: function (arg1, arg2, ...) {
-				console.info(arguments);
-			}
-		};
+    var obj = {
+      print: function (arg1, arg2, ...) {
+        console.info(arguments);
+      }
+    };
 
-		var overrides = {
-			print: function (base, arg1, arg2, ...) {
-				/*	 
-					The overriding function will receive a base proxy as its first argument
-					which provides some conveniences for invoking the overridden function.
-				*/
-				return base();
-			}
-		}
+    var overrides = {
+      print: function (base, arg1, arg2, ...) {
+        /*   
+          The overriding function will receive a base proxy as its first argument
+          which provides some conveniences for invoking the overridden function.
+        */
+        return base();
+      }
+    }
 
-		object(obj).override(overrides);
+    object(obj).override(overrides);
 
-		/*
-			obj is assigned a function that creates a base proxy and passes
-			it, along with any arguments, to the overriding function.
-			The new function can be invoked in the same way as the original.
-			In this case the override simply relays to its overridden function
-		*/
+    /*
+      obj is assigned a function that creates a base proxy and passes
+      it, along with any arguments, to the overriding function.
+      The new function can be invoked in the same way as the original.
+      In this case the override simply relays to its overridden function
+    */
 
-		obj.print('hello', 'world');
-			=> ['hello', 'world']
+    obj.print('hello', 'world');
+      => ['hello', 'world']
 
 
 About the base proxy:
@@ -158,49 +165,49 @@ About the base proxy:
 * ``base.callWithNoArguments()``. This helper can be used to call the original function without any arguments.
 
 * ``base.inject(function(){})``. This covers the most common scenario:
-		
-		function (base, arg1, arg2, ...) {
-			return base.inject(function (arg1, arg2, ...) {
-				// this is the context of the override
-				this.doSomethingElse();
-			});
-		}
+    
+    function (base, arg1, arg2, ...) {
+      return base.inject(function (arg1, arg2, ...) {
+        // this is the context of the override
+        this.doSomethingElse();
+      });
+    }
 
 * All of the above return the return value of the original function
 
 * The replacement **and** original functions are called in the context of ``obj``.
 
 This is useful in scenrios such as the following...
-		
-		// somewhere perhaps in a file far away...
+    
+    // somewhere perhaps in a file far away...
 
-		function MyMixin () {}
+    function MyMixin () {}
 
-		MyMixin.prototype = {
-			moduleFunction: function () { ... }
-		}
+    MyMixin.prototype = {
+      moduleFunction: function () { ... }
+    }
 
-		// and I define...
+    // and I define...
 
-		function MyThing () {}
+    function MyThing () {}
 
-		MyThing.prototype = {
-			doSomething: function () { ... }
-		};
+    MyThing.prototype = {
+      doSomething: function () { ... }
+    };
 
 
-		// which uses some other functionality
+    // which uses some other functionality
 
-		object(MyThing.prototype).mixin(MyMixin);
+    object(MyThing.prototype).mixin(MyMixin);
 
-		// but we need to inject additional custom behaviour...
+    // but we need to inject additional custom behaviour...
 
-		object(MyThing.prototype).override({
-			moduleFunction: function (base) {
-				this.doSomething();
-				return base();
-			}
-		});
+    object(MyThing.prototype).override({
+      moduleFunction: function (base) {
+        this.doSomething();
+        return base();
+      }
+    });
 
 The behaviour of MyThing is comprised of
 
@@ -208,59 +215,77 @@ The behaviour of MyThing is comprised of
 2. A mixin called MyMixin
 3. Some modifications to the MyMixin behaviour
 
-### DelegateTo
+### delegateTo
 
-		object(obj).delegateTo(delegate, 'this', 'that', 'theOther');
+    object(obj).delegateTo(delegate, 'this', 'that', 'theOther');
 
 obj has functions 'this', 'that', and 'theOther', which simpled delegate to the delegate objects functions of the same name.
 
 * arguments are forwarded
 * the delegates return values are returned
 
-### Copying
+### copy and deepCopy
 
 * ``object(obj).copy([memberName,]*)``
 * ``object(obj).deepCopy()``
 
 objects can be copied partially
 
- 		obj = {
-			good: 'bye'
-		, hello: 'world'
-		, cruel: 'world'
-		};
+     obj = {
+      good: 'bye'
+    , hello: 'world'
+    , cruel: 'world'
+    };
 
-		object(obj).copy('good', 'cruel') // any number of arguments are sliced
-		=> { good: 'bye', cruel: 'world' }
+    object(obj).copy('good', 'cruel') // any number of arguments are sliced
+    => { good: 'bye', cruel: 'world' }
 
-### Each
+### each
 
 Iterates through key-value pairs of an object
 
-	  object(obj).each(function (value, key) {}) 
+    object(obj).each(function (value, key) {}) 
 
 The specified function is called in the context of the object being iterated, in this case ``obj``.
 
 Why ``value, key`` rather than ``key, value``: It's more common to iterate through arrays than objects, in such cases, the value is the first argument to to the callback:
 
-		['array', 'of', 'things'].forEach(function (value) { ... })``
+    ['array', 'of', 'things'].forEach(function (value) { ... })``
 
 To prevent surprise, the object iterator stays consistent, adding the extra 'key' as a second parameter.
 
 
-### ToArray
+### toArray
 
 Get an array of an objects values
 
-		var obj = {
-			one: 	 1,
-			two: 	 2,
-			three: 3
-		};
+    var obj = {
+      one:    1,
+      two:    2,
+      three: 3
+    };
 
-		object(obj).toArray();
-		=> [1, 2, 3]
+    object(obj).toArray();
+    => [1, 2, 3]
 
+## Extending/Plugins
+
+Define your own object processor like so:
+
+		object.plugin({
+			yourPlugin: function (param) {
+				...
+				return 'your return value & ' + param;
+			}
+		});
+
+		...
+		
+		object(obj).yourPlugin(123);
+			=> "your return value & 123"
+
+* to get `obj` inside `yourPlugin`: `this.__obj__`
+* `this` inside `yourFunction` is an `ObjectProcessor` which hosts all of this libraries functions such as `mixin`, `overwrite`, `copy` etc. as well as any plugins.
 
 ## Browser and Platform Support
 
