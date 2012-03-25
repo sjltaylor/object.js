@@ -68,7 +68,7 @@ If instead a function is passed, it is called as a constructor: ``new MyModule``
 
 #### Providing a Mixin initializer
 
-after mixing in, if an initialize method was defined by the mixin it is called with any arguments after the mixin or mixin constructor.
+You can optionally specify a mixin initializer to be called after the the mixin is mixed in. The initializer is called with any arguments passed to `mixin()` after the mixin itself.
   
   function MyModule () { }
 
@@ -83,17 +83,17 @@ after mixing in, if an initialize method was defined by the mixin it is called w
   object({}).mixin(MyModule, 1, true, 'three');
 
 
-A MyModule object is created and its mixin function is called with the arguments 1, true, 'three'
+A MyModule object is created and its `__mixin__` initializer function is called with the arguments 1, true, 'three'
 
 **Notes**:
 
 * The mixin initializer will not be mixed into the object.
-* The functions of the mixin are mixed in before the initializer is called
+* The functions of the mixin are mixed in __before__ the initializer is called
 * The MyModule constructor is not called with arguments
 
 ### defaults
 
-Defaults assigns members of the specified object(s) to the object being modified without overwriting. Example usage: a function that takes options:
+Assigns members of the specified object(s) to the object being modified without overwriting. Example use: a function that takes options:
 
   function iTakeOptions (options) {
     
@@ -105,30 +105,43 @@ Defaults assigns members of the specified object(s) to the object being modified
     , 'to-mix': 'in'
     });
     ...
+    
+    /* 
+    options now looks like this:
+    {
+      async:      false
+    , iterations: 5
+    , another:    'object'
+    , 'to-mix':   'in'
+    }
+    */
   }
 
 * any number of objects can be passed to defaults, they are mixed in in the order specified
-* object(obj) with an undefined obj will act on a new, empty object.
+* `object(obj)` with an undefined obj will create a new, empty object.
 
   
 ### overwrite
 
-Overwriting works the same as defaults except that existing members of an object or its prototype will be replaced.
+Overwriting simply assigns members specifed to the obj.
     
     var obj = { a: 123 };
     
     console.info(obj.a);
       => 123
     
-    object(obj).overwrite({ a: 456 });
+    object(obj).overwrite({ a: 456, b: 789 });
     
     console.info(obj.a);
       => 456
+    
+    console.info(obj.b);
+      => 789
 
 
 ### override
 
-Override works only with functions and provides a convenient way to access the overridden function.
+Override works only with functions and provides a convenient proxy to the overridden function.
 
     var obj = {
       print: function (arg1, arg2, ...) {
