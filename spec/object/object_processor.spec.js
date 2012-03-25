@@ -437,10 +437,12 @@ describe('ObjectProcessor', function () {
     });
 
     it('returns the delegates return value', function () {
+      
       expect(obj.hello()).toEqual('moto');
     });
 
     it('passes all arguments to the delegate function', function () {
+      
       spyOn(delegate, 'world');
       obj.world(1,2,3,4);
       expect(delegate.world).toHaveBeenCalledWith(1,2,3,4);
