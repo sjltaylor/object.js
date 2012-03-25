@@ -40,6 +40,8 @@ Object.js has zero dependencies.
     object(obj).deepCopy();
     object(obj).each(function (value, key) { ... });
     object(obj).toArray()
+    // use plugins to have ...
+    object(obj).yourFunctionHere();
 
 ### mixin and qmixin
 
