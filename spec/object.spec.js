@@ -6,7 +6,7 @@ describe('object()', function () {
 
   it('returns a new object if an undefined object is passed', function () {
     var undef;
-    expect(object(undef).mixin({a:1})).toEqual({a:1});
+    expect(object(undef).defaults({a:1})).toEqual({a:1});
   });
 
   describe('object.plugin()', function () {

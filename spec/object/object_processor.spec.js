@@ -79,7 +79,9 @@ describe('ObjectProcessor', function () {
       var cFunction = function () { return 456; }
         , dObject   = {};
 
-      var obj = object({}).mixin({
+      var obj = {};
+
+      object(obj).mixin({
         a: 123
       , b: true
       , c: cFunction
@@ -97,7 +99,9 @@ describe('ObjectProcessor', function () {
       function MyDefaults () {}
       MyDefaults.prototype = { abc: 123 };
 
-      var obj = object({}).mixin(new MyDefaults);
+      var obj = {};
+
+      object(obj).mixin(new MyDefaults);
 
       expect(obj.abc).toBe(123);
     });
@@ -113,10 +117,12 @@ describe('ObjectProcessor', function () {
       expect(obj.a).toBe(321);
     });
 
-    it('returns the target object', function () {
+    it('returns the object processor object', function () {
+      
       var obj = {};
-      var result = object(obj).mixin(obj);
-      expect(result).toBe(obj);
+      var objectProcessor = object(obj);
+      
+      expect(objectProcessor.mixin({})).toBe(objectProcessor);
     });
 
     it('mixes in a constructed object if passed a function', function () {
@@ -129,7 +135,9 @@ describe('ObjectProcessor', function () {
         def: 456
       };
 
-      var obj = object({}).mixin(MyMixin);
+      var obj = {};
+
+      object(obj).mixin(MyMixin);
 
       expect(obj.abc).toBe(123);
       expect(obj.def).toBe(456);
@@ -173,7 +181,9 @@ describe('ObjectProcessor', function () {
           f1: function () { return 1234; }
         };
 
-        var obj = object(new MyObj).qmixin({
+        var obj = new MyObj;
+
+        object(obj).qmixin({
           f1: function () { return 5678; }
         });
 
@@ -182,7 +192,9 @@ describe('ObjectProcessor', function () {
 
       it('does not overwrite members of the target object', function () {
       
-        var obj = object({a:123}).qmixin({a:456});
+        var obj = {a:123};
+
+        object(obj).qmixin({a:456});
 
         expect(obj.a).toBe(123);
       });
@@ -197,6 +209,14 @@ describe('ObjectProcessor', function () {
 
         expect(obj.a).toBe(321);
       });
+
+      it('returns the object processor object', function () {
+      
+        var obj = {};
+        var objectProcessor = object(obj);
+        
+        expect(objectProcessor.qmixin({})).toBe(objectProcessor);
+      });
     });
   });
   
@@ -207,16 +227,18 @@ describe('ObjectProcessor', function () {
       var cFunction = function () { return 456; }
         , dObject   = {};
 
-      var obj = object({
+      var obj = {
         a: 456
       , b: false
       , c: 'hello'
-      }).overwrite({
+      };
+
+      object(obj).overwrite({
         a: 123
       , b: true
       , c: cFunction
       , d: dObject
-      })
+      });
       
       expect(obj.a).toEqual(123);
       expect(obj.b).toBe(true);
@@ -224,24 +246,28 @@ describe('ObjectProcessor', function () {
       expect(obj.d).toEqual(dObject);
     });
 
-    it('does overwrite members of the target objects prototype', function () {
+    it('overwrites members of the target objects prototype', function () {
        
       function MyObj () {};
       MyObj.prototype = {
         f1: function () { return 1234; }
       };
 
-      var obj = object(new MyObj).overwrite({
+      var obj = new MyObj;
+
+      object(obj).overwrite({
         f1: function () { return 5678; }
       });
 
       expect(obj.f1()).toBe(5678);
     });
 
-    it('returns the target object', function () {
+    it('returns the object processor object', function () {
+      
       var obj = {};
-      var result = object(obj).overwrite(obj);
-      expect(result).toBe(obj);
+      var objectProcessor = object(obj);
+      
+      expect(objectProcessor.overwrite({})).toBe(objectProcessor);
     });
   });
 
@@ -255,10 +281,13 @@ describe('ObjectProcessor', function () {
       }).toThrow('no function to override: f');
     });
 
-    it('returns the obj', function () {
+    it('returns the object processor object', function () {
+      
       var obj = {};
-      expect(object(obj).override({})).toBe(obj);
-    })
+      var objectProcessor = object(obj);
+      
+      expect(objectProcessor.override({})).toBe(objectProcessor);
+    });
 
     describe("base proxy usage", function() {
       

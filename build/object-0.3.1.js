@@ -63,7 +63,7 @@
         initializer.apply(this.__obj__, args);
       }
 
-      return this.__obj__;
+      return this;
 
     }
   , mixin: function (mixin) {
@@ -74,7 +74,7 @@
       , args: Array.prototype.slice.call(arguments, 1)
       });
     }
-   , qmixin: function (mixin) {
+  , qmixin: function (mixin) {
       
       return this.__mixin__({
         mixin: mixin
@@ -88,7 +88,7 @@
         this.__obj__[member] = replacements[member];
       }
 
-      return this.__obj__;
+      return this;
     }
   , __overrideFunction__: function (original, replacement) {
     
@@ -128,7 +128,7 @@
         this.__obj__[member] = this.__overrideFunction__(this.__obj__[member], overrides[member]);
       }
 
-      return this.__obj__;
+      return this;
     }
   , delegateTo: function (delegate) {
 
