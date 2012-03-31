@@ -31,7 +31,7 @@ Object.js has zero dependencies.
 
 ## Usage
 
-    object(obj).mixin({ ... });
+    objectjs(obj).mixin({ ... });
     object(obj).qmixin({ ... });
     object(obj).defaults({ ... });
     object(obj).overwrite({ ... });
@@ -43,6 +43,10 @@ Object.js has zero dependencies.
     object(obj).toArray()
     // use plugins to have ...
     object(obj).yourFunctionHere();
+
+
+`object` is not a Javascript reserve word and is [not likely to be in the future](https://developer.mozilla.org/en/JavaScript/Reference/Reserved_Words)
+
 
 
 ## Browser and Platform Support
