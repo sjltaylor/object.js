@@ -30,6 +30,11 @@ object.ObjectProcessor = (function () {
       var initializer = mixin.__mixin__;
       
       for (var member in mixin) {
+        
+        if (typeof mixin[member] !== 'function') {
+          throw new Error('cannot mixin non-function: ' + member)
+        } 
+               
         if (member !== '__mixin__') {
           if (member in this.__obj__) {
             if (!quiet) {

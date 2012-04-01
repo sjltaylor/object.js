@@ -76,45 +76,43 @@ describe('ObjectProcessor', function () {
     
     it('gains the members of the specified mixin', function () {
       
-      var cFunction = function () { return 456; }
-        , dObject   = {};
-
+      var cFunction = function () { return 456; };
       var obj = {};
 
       object(obj).mixin({
-        a: 123
-      , b: true
+        a: function(){}
+      , b: function(){}
       , c: cFunction
-      , d: dObject
+      , d: function(){}
       })
       
-      expect(obj.a).toEqual(123);
-      expect(obj.b).toBe(true);
       expect(obj.c).toBe(cFunction);
-      expect(obj.d).toEqual(dObject);
     });
 
     it('gains the members of the specified mixins prototype', function () {
       
+      var f = function () {};
+      
       function MyDefaults () {}
-      MyDefaults.prototype = { abc: 123 };
+      MyDefaults.prototype = { abc: f };
 
       var obj = {};
 
       object(obj).mixin(new MyDefaults);
 
-      expect(obj.abc).toBe(123);
+      expect(obj.abc).toBe(f);
     });
 
     it('throws an error when there is a name collision', function () {
-        
-      var obj = { a: 321 };
+      var f = function () {};
+      
+      var obj = { a: f };
 
       expect(function () {
-        object(obj).mixin({a:123});
+        object(obj).mixin({a:f});
       }).toThrow('already defined: a');
 
-      expect(obj.a).toBe(321);
+      expect(obj.a).toBe(f);
     });
 
     it('returns the object processor object', function () {
@@ -127,20 +125,23 @@ describe('ObjectProcessor', function () {
 
     it('mixes in a constructed object if passed a function', function () {
       
+      var f = function () {}
+        , g = function () {};
+
       function MyMixin() {
-        this.abc = 123  
+        this.abc = f  
       }
 
       MyMixin.prototype = {
-        def: 456
+        def: g
       };
 
       var obj = {};
 
       object(obj).mixin(MyMixin);
 
-      expect(obj.abc).toBe(123);
-      expect(obj.def).toBe(456);
+      expect(obj.abc).toBe(f);
+      expect(obj.def).toBe(g);
     });
 
     it('calls a mixin initializer if one exists, passing all except the first argument', function () {
@@ -172,6 +173,13 @@ describe('ObjectProcessor', function () {
       expect(obj.woof).toHaveBeenCalled();
     });
 
+    it('throws if we try to mixin a non function', function () {
+      var a = {}, b = {hello: 'string'};
+      expect(function () {
+        object(a).mixin(b);
+      }).toThrow('cannot mixin non-function: hello');
+    })
+
     describe('qmixin()', function () {
       
       it('does not overwrite members of the target objects prototype', function () {
@@ -191,23 +199,26 @@ describe('ObjectProcessor', function () {
       });
 
       it('does not overwrite members of the target object', function () {
-      
-        var obj = {a:123};
+        
+        var f = function () {};
 
-        object(obj).qmixin({a:456});
+        var obj = {a:f};
 
-        expect(obj.a).toBe(123);
+        object(obj).qmixin({a:f});
+
+        expect(obj.a).toBe(f);
       });
 
       it('does not throw an error when there is a name collision', function () {
         
-        var obj = { a: 321 };
+        var f = function () {};
+        var obj = { a: f };
 
         expect(function () {
-          object(obj).qmixin({a:123});
+          object(obj).qmixin({a:f});
         }).not.toThrow();
 
-        expect(obj.a).toBe(321);
+        expect(obj.a).toBe(f);
       });
 
       it('returns the object processor object', function () {
