@@ -39,6 +39,7 @@ Object.js has zero dependencies.
     object(obj).copy();
     object(obj).deepCopy();
     object(obj).each(function (value, key) { ... });
+    object(obj).map(function (value, key) { ... });
     object(obj).delegateTo(otherObj, 'this', 'that', 'theOther');
     object(obj).toArray()
     // use plugins to have ...

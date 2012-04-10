@@ -175,6 +175,15 @@ object.ObjectProcessor = (function () {
       
       return this.__obj__;
     }
+  , map: function (delegate) {
+      var obj = {};
+
+      for(var member in this.__obj__) {
+        obj[member] = delegate(this.__obj__[member], member);
+      }
+
+      return obj;
+    }
   , toArray: function () {
       var o = this.__obj__;
 

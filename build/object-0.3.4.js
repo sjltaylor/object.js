@@ -1,4 +1,4 @@
-/**/;object = (function () {
+/**/;var object = (function () {
 
   function object (obj) {
     
@@ -16,7 +16,15 @@
   return object;
 })();
 
-;object.ObjectProcessor = (function () {
+if (typeof require === 'function' && typeof module === 'object') {
+  module.exports.object                 = object;
+  module.exports.object.ObjectProcessor = require('./object/object_processor').ObjectProcessor;
+}
+;if (typeof require === 'function' && typeof module === 'object') {
+  var object = require('../object');
+}
+
+object.ObjectProcessor = (function () {
 
   function ObjectProcessor (obj) {
     this.__obj__ = obj;
@@ -189,6 +197,15 @@
       
       return this.__obj__;
     }
+  , map: function (delegate) {
+      var obj = {};
+
+      for(var member in this.__obj__) {
+        obj[member] = delegate(this.__obj__[member], member);
+      }
+
+      return obj;
+    }
   , toArray: function () {
       var o = this.__obj__;
 
@@ -199,4 +216,8 @@
   }
 
   return ObjectProcessor;
-})();;
+})();
+
+if (typeof require === 'function' && typeof module === 'object') {
+  module.exports.ObjectProcessor = object.ObjectProcessor;
+};

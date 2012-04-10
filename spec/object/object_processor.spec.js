@@ -576,6 +576,26 @@ describe('ObjectProcessor', function () {
     });
   });
 
+  describe('map()', function () {
+    it('returns a new object with the values replaced', function () {
+      
+      var obj = object({one: 0, two: 1, three: 2}).map(function (value, key) {
+        return value + 1;
+      });
+
+      expect(obj).toEqual({one: 1, two: 2, three: 3});
+    });
+
+    it('passes the key as the second argument to the delegate', function () {
+      
+      var listener = jasmine.createSpy('listener');
+
+      var obj = object({one: 0}).map(listener);
+
+      expect(listener).toHaveBeenCalledWith(0, 'one');
+    });
+  });
+
   describe('toArray()', function () {
     it('returns an array of all of the objects members', function () {
       
