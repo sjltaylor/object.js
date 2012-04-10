@@ -1,4 +1,4 @@
-object = (function () {
+var object = (function () {
 
   function object (obj) {
     
@@ -16,3 +16,7 @@ object = (function () {
   return object;
 })();
 
+if (typeof require === 'function' && typeof module === 'object') {
+  module.exports.object                 = object;
+  module.exports.object.ObjectProcessor = require('./object/object_processor').ObjectProcessor;
+}

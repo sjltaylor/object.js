@@ -31,7 +31,7 @@ Object.js has zero dependencies.
 
 ## Usage
 
-    objectjs(obj).mixin({ ... });
+    object(obj).mixin({ ... });
     object(obj).qmixin({ ... });
     object(obj).defaults({ ... });
     object(obj).overwrite({ ... });

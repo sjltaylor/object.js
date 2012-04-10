@@ -1,3 +1,7 @@
+if (typeof require === 'function' && typeof module === 'object') {
+  var object = require('../object');
+}
+
 object.ObjectProcessor = (function () {
 
   function ObjectProcessor (obj) {
@@ -182,3 +186,7 @@ object.ObjectProcessor = (function () {
 
   return ObjectProcessor;
 })();
+
+if (typeof require === 'function' && typeof module === 'object') {
+  module.exports.ObjectProcessor = object.ObjectProcessor;
+}
