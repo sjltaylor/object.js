@@ -45,7 +45,7 @@ Object.js has zero dependencies.
     object(obj).yourFunctionHere();
 
 
-`object` is not likely to be a [javascript reserve word be in the future](https://developer.mozilla.org/en/JavaScript/Reference/Reserved_Words)
+`object` is [not likely to be a javascript reserve word in the future](https://developer.mozilla.org/en/JavaScript/Reference/Reserved_Words)
 
 
 
